@@ -1,0 +1,13 @@
+{
+    "extends": "./node_modules/kcd-scripts/shared-tsconfig.json",
+    "compilerOptions": {
+        "target": "ESNext",
+        "noImplicitAny": false,
+        "strictNullChecks": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "noUncheckedIndexedAccess": true,
+        "allowSyntheticDefaultImports": true,
+        "importsNotUsedAsValues": "error",
+    }
+}
