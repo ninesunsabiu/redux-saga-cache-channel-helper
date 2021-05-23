@@ -13,13 +13,13 @@ test('takeCache: sync actions', () => {
     let called = 0;
     const delayMs = expTime;
     const largeDelayMs = delayMs + 100;
-    const actual: [number, unknown][] = [];
+    const actual: [number, string][] = [];
     const expected = [[1, 'a']];
     const middleware = sagaMiddleware();
     const store = createStore(() => ({}), {}, applyMiddleware(middleware));
     middleware.run(saga);
 
-    function fnToCall(action) {
+    function fnToCall(action: { type: string; payload: string }) {
         called++;
         actual.push([called, action.payload]);
     }
@@ -61,7 +61,7 @@ test('takeCache: async actions', () => {
     const delayMs = 33;
     const smallDelayMs = delayMs - 10;
     const largeDelayMs = expTime + 10;
-    const actual: [number, unknown][] = [];
+    const actual: [number, string][] = [];
     const expected = [
         [1, 'a'],
         [2, 'b'],
@@ -72,7 +72,7 @@ test('takeCache: async actions', () => {
     const store = createStore(() => ({}), {}, applyMiddleware(middleware));
     middleware.run(saga);
 
-    function fnToCall(action) {
+    function fnToCall(action: { type: string; payload: string }) {
         called++;
         actual.push([called, action.payload]);
     }
@@ -150,7 +150,7 @@ test('takeCache: in saga', () => {
         const tasks = Array.from({ length: 3 }).map((_, index) => put(createBAction(index)));
         yield all(tasks);
     }
-    function workerB(action) {
+    function workerB(action: { type: string; payload: number }) {
         called++;
         actual.push([called, action.payload]);
     }
