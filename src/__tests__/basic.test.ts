@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, AnyAction } from 'redux';
 import sagaMiddleware from 'redux-saga';
 import { takeCache } from 'index';
-import { cancel, take } from 'redux-saga/effects';
+import { all, cancel, put, take, takeEvery } from 'redux-saga/effects';
 
 const expTime = 1 * 1000;
 const delayP = (delay: number) => new Promise((r) => setTimeout(r, delay));
@@ -50,7 +50,7 @@ test('takeCache: sync actions', () => {
             })
         )
         .then(() => {
-            expect(actual).toEqual(expected);
+            expect(actual).toStrictEqual(expected);
         });
 });
 
@@ -123,6 +123,41 @@ test('takeCache: async actions', () => {
             })
         )
         .then(() => {
-            expect(actual).toEqual(expected);
+            expect(actual).toStrictEqual(expected);
         });
+});
+
+test('takeCache: in saga', () => {
+    let called = 0;
+    const actual: [number, number][] = [];
+    const expected = [
+        [1, 0],
+        [2, 1],
+        [3, 2]
+    ];
+    const cacheKeyFn = jest.fn(actionKey);
+
+    const middleware = sagaMiddleware();
+    const store = createStore(() => ({}), {}, applyMiddleware(middleware));
+    const actionCreator = (type: string) => (payload: number) => ({ type, payload });
+    const [createAAction, createBAction] = ['ACTION-A', 'ACTION-B'].map(actionCreator) as [
+        ReturnType<typeof actionCreator>,
+        ReturnType<typeof actionCreator>
+    ];
+    function* workerA() {
+        const tasks = Array.from({ length: 3 }).map((_, index) => put(createBAction(index)));
+        yield all(tasks);
+    }
+    function* workerB(action) {
+        called++;
+        actual.push([called, action.payload]);
+    }
+    function* saga() {
+        yield all([takeEvery('ACTION-A', workerA), takeCache('ACTION-B', workerB, cacheKeyFn)]);
+    }
+    middleware.run(saga);
+
+    store.dispatch(createAAction(0));
+    expect(cacheKeyFn).toBeCalledTimes(3);
+    expect(actual).toStrictEqual(expected);
 });
