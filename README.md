@@ -68,12 +68,12 @@ function workerSaga() {
 
 function* rootSaga() {
     yield takeCache(
-        'fetch-options',
-        workerSaga,
         (action: FetchOptionsAction) => {
             const { type, payload: { id, flag } } = action;
             return [[type, id, flag].join(','), 0.5 * 1000];
         },
+        'fetch-options',
+        workerSaga
     );
 }
 ```
