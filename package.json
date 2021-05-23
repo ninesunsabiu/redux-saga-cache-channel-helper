@@ -30,5 +30,12 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ninesunsabiu/redux-saga-cache-channel-helper"
+  },
+  "bugs": {
+    "url": "https://github.com/ninesunsabiu/redux-saga-cache-channel-helper/issues"
   }
 }

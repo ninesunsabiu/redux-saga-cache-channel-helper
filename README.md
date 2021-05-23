@@ -39,11 +39,6 @@ function* rootSaga() {
 因此需要有个状态量来保存对应的失效时间  
 ```ts
 declare function takeCache(
-    p: ActionPattern,
-    /**
-     * a Generator function
-     */
-    worker: (...args: any[]) => any,
     /**
      * 缓存决策函数
      */
@@ -53,6 +48,11 @@ declare function takeCache(
         /** 失效时间，单位为毫秒 */
         expirationTime?: number
     ],
+    p: ActionPattern,
+    /**
+     * a Generator function
+     */
+    worker: (...args: any[]) => any,
     ...workerArgs: unknown[]
 ): ForkEffect;
 ```
