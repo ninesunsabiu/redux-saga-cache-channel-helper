@@ -4,7 +4,7 @@ import type { ActionPattern, Channel } from '@redux-saga/types';
 import type { AnyAction } from 'redux';
 import createCacheChannel from 'channel';
 
-export function takeCache(p: ActionPattern, worker: WorkerSaga, cache: CacheFn, ...args: unknown[]) {
+export function takeCache(cache: CacheFn, p: ActionPattern, worker: WorkerSaga, ...args: unknown[]) {
     function* main(p: ActionPattern, cache: CacheFn, worker: WorkerSaga, ...args: unknown[]) {
         const cacheChannel: Channel<AnyAction> = yield call(createCacheChannel, cache);
 

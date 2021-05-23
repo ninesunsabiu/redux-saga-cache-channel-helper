@@ -23,7 +23,7 @@ test('takeCache: sync actions', () => {
     }
 
     function* saga() {
-        const task = yield takeCache('ACTION', fnToCall, actionKey);
+        const task = yield takeCache(actionKey, 'ACTION', fnToCall);
         yield take('CANCEL_WATCHER');
         yield cancel(task);
     }
@@ -76,7 +76,7 @@ test('takeCache: async actions', () => {
     }
 
     function* saga() {
-        const task = yield takeCache('ACTION', fnToCall, actionKey);
+        const task = yield takeCache(actionKey, 'ACTION', fnToCall);
         yield take('CANCEL_WATCHER');
         yield cancel(task);
     }
@@ -153,7 +153,7 @@ test('takeCache: in saga', () => {
         actual.push([called, action.payload]);
     }
     function* saga() {
-        yield all([takeEvery('ACTION-A', workerA), takeCache('ACTION-B', workerB, cacheKeyFn)]);
+        yield all([takeEvery('ACTION-A', workerA), takeCache(cacheKeyFn, 'ACTION-B', workerB)]);
     }
     middleware.run(saga);
 
