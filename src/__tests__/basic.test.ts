@@ -1,4 +1,6 @@
-import { createStore, applyMiddleware, AnyAction } from 'redux';
+import type { Task } from 'redux-saga';
+import type { AnyAction } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import sagaMiddleware from 'redux-saga';
 import { takeCache } from 'index';
 import { all, cancel, put, take, takeEvery } from 'redux-saga/effects';
@@ -17,15 +19,15 @@ test('takeCache: sync actions', () => {
     const store = createStore(() => ({}), {}, applyMiddleware(middleware));
     middleware.run(saga);
 
-    function* fnToCall(action) {
+    function fnToCall(action) {
         called++;
         actual.push([called, action.payload]);
     }
 
-    function* saga() {
+    function* saga(): Generator<unknown, void, unknown> {
         const task = yield takeCache(actionKey, 'ACTION', fnToCall);
         yield take('CANCEL_WATCHER');
-        yield cancel(task);
+        yield cancel(task as Task);
     }
 
     return Promise.resolve()
@@ -70,15 +72,15 @@ test('takeCache: async actions', () => {
     const store = createStore(() => ({}), {}, applyMiddleware(middleware));
     middleware.run(saga);
 
-    function* fnToCall(action) {
+    function fnToCall(action) {
         called++;
         actual.push([called, action.payload]);
     }
 
-    function* saga() {
+    function* saga(): Generator<unknown, void, unknown> {
         const task = yield takeCache(actionKey, 'ACTION', fnToCall);
         yield take('CANCEL_WATCHER');
-        yield cancel(task);
+        yield cancel(task as Task);
     }
 
     return Promise.resolve()
@@ -129,7 +131,7 @@ test('takeCache: async actions', () => {
 
 test('takeCache: in saga', () => {
     let called = 0;
-    const actual: [number, number][] = [];
+    const actual: [number, unknown][] = [];
     const expected = [
         [1, 0],
         [2, 1],
@@ -148,7 +150,7 @@ test('takeCache: in saga', () => {
         const tasks = Array.from({ length: 3 }).map((_, index) => put(createBAction(index)));
         yield all(tasks);
     }
-    function* workerB(action) {
+    function workerB(action) {
         called++;
         actual.push([called, action.payload]);
     }

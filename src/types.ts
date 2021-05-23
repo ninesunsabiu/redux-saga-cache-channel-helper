@@ -5,5 +5,5 @@ export interface CacheFn {
 }
 
 export interface WorkerSaga {
-    (...args: unknown[]): any;
+    (...args: unknown[]): unknown;
 }
