@@ -1,7 +1,7 @@
 import type { Action } from 'redux';
 import type { Channel } from 'redux-saga';
-import type { CacheFn } from 'types';
 import { channel } from 'redux-saga';
+import type { CacheFn } from './types';
 
 type CacheKey = string;
 type ExpirationTime = number;

@@ -9,5 +9,11 @@
         "noUncheckedIndexedAccess": true,
         "allowSyntheticDefaultImports": true,
         "importsNotUsedAsValues": "error",
+        "baseUrl": "./src",
+        "paths": {
+            "@/*": [
+                "./*"
+            ]
+        }
     }
 }

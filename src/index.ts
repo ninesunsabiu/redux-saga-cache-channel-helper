@@ -1,9 +1,9 @@
 import type { ForkEffect, HelperWorkerParameters } from 'redux-saga/effects';
-import type { CacheFn } from 'types';
 import type { ActionPattern, Channel, ActionMatchingPattern } from '@redux-saga/types';
 import type { Action, AnyAction } from 'redux';
 import { call, fork, put, takeEvery } from 'redux-saga/effects';
-import createCacheChannel from 'channel';
+import type { CacheFn } from './types';
+import createCacheChannel from './channel';
 
 export function takeCache<P extends ActionPattern>(
     cache: CacheFn,
